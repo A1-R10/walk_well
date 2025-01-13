@@ -1,57 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+{% extends '_base.html' %}
 
-  <!-- leaflet  -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  
-  <!-- leaflet routing machine -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-</head>
-<body>
-	<div class="container mt-5">
-    <h1 class="text-center">Walk Well</h1>
-    <div id="map" class="mt-4" style="height: 500px;"></div>
-</div>
- <!-- leaflet script -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+{% block title %}
+Walk Well
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Walk Well</h1>
+<div id="map" class="mt-4" style="height: 500px;"></div>
+{% endblock %}
+
+{% block scripts %}
 <script>
-    // Map
-    var map = L.map('map').setView([14.599512, 120.984222], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19
-    }).addTo(map);
+  // Map
+  var map = L.map('map').setView([14.599512, 120.984222], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19
+  }).addTo(map);
 
-    // map click event
-    map.on('click', function(e) {
-      console.log(e)
-      var startMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+  // map click event
+  map.on('click', function(e) {
+    console.log(e)
+    var startMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+    
+    // Will initialize the route
+    map.on('click', function(e2) {
+      console.log(e2)
+      var endMarker = L.marker([e2.latlng.lat, e2.latlng.lng]).addTo(map);
       
-      // Will initialize the route
-      map.on('click', function(e2) {
-        console.log(e2)
-        var endMarker = L.marker([e2.latlng.lat, e2.latlng.lng]).addTo(map);
-        
-        L.Routing.control({
-          waypoints: [
-            L.latLng(startMarker.getLatLng().lat, startMarker.getLatLng().lng),
-            L.latLng(e2.latlng.lat, e2.latlng.lng)
-          ]
-        }).on('routesfound', function(e) {
-          console.log(e)
-          e.routes[0].coordinates.forEach(function(coord, index){
-            setTimeout(() => {
-              startMarker.setLatLng([coord.lat, coord.lng])
-            }, 100 * index);
-          })
-        })  
-        .addTo(map);
-      }, { once: true });
-    })
+      L.Routing.control({
+        waypoints: [
+          L.latLng(startMarker.getLatLng().lat, startMarker.getLatLng().lng),
+          L.latLng(e2.latlng.lat, e2.latlng.lng)
+        ]
+      }).on('routesfound', function(e) {
+        console.log(e)
+        e.routes[0].coordinates.forEach(function(coord, index){
+          setTimeout(() => {
+            startMarker.setLatLng([coord.lat, coord.lng])
+          }, 100 * index);
+        })
+      })  
+      .addTo(map);
+    }, { once: true });
+  })
 </script>
-</body>
-</html>
+{% endblock %}
