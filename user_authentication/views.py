@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login ,logout
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -13,7 +13,7 @@ def user_login(request):
         if user is None:
             # If authentication failed
             messages.error(request, 'Invalid Login')
-            return redirect('accounts:login')
+            return redirect('login')
         else:
             #If authentication is successful
             login(request, user)
@@ -33,7 +33,7 @@ def user_register(request):
 
         if user.exists():
             messages.info(request, 'Username already exist!')
-            return redirect('authentication:register')
+            return redirect('register')
         
         # create new user object with provided info
         user = User.objects.create_user(first_name=first_name,
@@ -50,3 +50,7 @@ def user_register(request):
         return redirect('home')
     
     return render(request, 'user_authentication/register.html')
+
+def user_logout(request):
+    logout(request)
+    return redirect('home')
