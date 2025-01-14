@@ -5,7 +5,7 @@ Walk Well
 {% endblock %}
 
 {% block content %}
-	<div class="container mt-5">
+    <div class="container mt-5">
     <h1 class="text-center">Walk Well</h1>
     <div id="map" class="mt-4" style="height: 500px;"></div>
 {% endblock %}
@@ -14,91 +14,40 @@ Walk Well
 {% block scripts %}
 <script>
    // Initialize the map
-var map = L.map('map').setView([14.599512, 120.984222], 13);
+const map = L.map('map').setView([14.599512, 120.984222], 13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19
 }).addTo(map);
 
-// Create a dropdown for transportation modes
-var modeControl = L.control({ position: 'topright' });
-modeControl.onAdd = function(map) {
-    var div = L.DomUtil.create('div', 'info mode-control');
-    div.innerHTML = `
-        <label for="transportation-mode">Mode:</label>
-        <select id="transportation-mode">
-            <option value="foot-walking">Walking</option>
-            <option value="cycling-regular">Cycling</option>
-            <option value="driving-car">Driving</option>
-        </select>
-    `;
-    L.DomEvent.disableClickPropagation(div);
-    return div;
-};
-modeControl.addTo(map);
+// map click event
+let firstMarker;
+map.on('click', function(e) {
+    if (!firstMarker) {
+        firstMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+    } else {
+        let secondMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
 
-// Map click event for selecting start and end points
-let startMarker, endMarker;
+        // Initialize the route
+        L.Routing.control({
+            waypoints: [
+                firstMarker.getLatLng(),
+                secondMarker.getLatLng()
+            ]
+        }).on('routesfound', function(e) {
+            console.log(e);
+            e.routes[0].coordinates.forEach(function(coord, index){
+                setTimeout(() => {
+                    firstMarker.setLatLng([coord.lat, coord.lng]);
+                }, 100 * index);
+            });
+        }).addTo(map);
 
-map.on('click', function (e) {
-    if (!startMarker) {
-        startMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
-    } else if (!endMarker) {
-        endMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
-
-        // Fetch route after both markers are placed
-        fetchRoute();
-    }
-});
-
-function fetchRoute() {
-    const mode = document.getElementById('transportation-mode').value;
-    const startCoords = [startMarker.getLatLng().lat, startMarker.getLatLng().lng];
-    const endCoords = [endMarker.getLatLng().lat, endMarker.getLatLng().lng];
-
-
-    fetch(`https://api.openrouteservice.org/v2/directions/${mode}/json`, {
-        method: 'POST',
-        headers: {
-            'Authorization': '5b3ce3597851110001cf62485a594335aa004b7b9cf4a5a1eb216cc6',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            coordinates: [startCoords, endCoords]
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('API Response:', data);  // Log the API response to inspect
-
-        if (data && data.routes && data.routes.length > 0) {
-            const route = data.routes[0].geometry.coordinates.map(coord => [coord[1], coord[0]]);
-            L.polyline(route, { color: 'blue' }).addTo(map);
-            // Animate the route on the map
-            animateRoute(route);
-        } else {
-            // Handle cases when no route is found
-            console.error('No route found:', data);
+        // Reset firstMarker for the next route
+        firstMarker = null;
         }
-    })
-    .catch(err => {
-        // Log any errors during fetch or processing
-        console.error('Error fetching route:', err);
     });
-}
 
-
-function animateRoute(route) {
-    let index = 0;
-    const marker = L.marker(route[0]).addTo(map);
-
-    function moveMarker() {
-        if (index < route.length) {
-            marker.setLatLng(route[index]);
-            index++;
-            setTimeout(moveMarker, 100); // Adjust speed
-        }
-    }
-    moveMarker();
-}
+// Location Search
+L.Control.geocoder().addTo(map);
 </script>
 {% endblock %}
