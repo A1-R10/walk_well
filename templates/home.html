@@ -1,36 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+{% extends '_base.html' %}
 
-  <!-- leaflet  -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  
-  <!-- leaflet routing machine -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+{% block title %}
+Walk Well
+{% endblock %}
 
-  <style>
-    #map {
-        height: 100vh;
-    }
-    .mode-control {
-        background: white;
-        padding: 10px;
-        border-radius: 5px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    }
-</style>
-</head>
-<body>
+{% block content %}
 	<div class="container mt-5">
     <h1 class="text-center">Walk Well</h1>
     <div id="map" class="mt-4" style="height: 500px;"></div>
-</div>
+{% endblock %}
+
  <!-- leaflet script -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+{% block scripts %}
 <script>
    // Initialize the map
 var map = L.map('map').setView([14.599512, 120.984222], 13);
@@ -119,7 +100,5 @@ function animateRoute(route) {
     }
     moveMarker();
 }
-
 </script>
-</body>
-</html>
+{% endblock %}
