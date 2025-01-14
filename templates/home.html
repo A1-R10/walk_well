@@ -21,32 +21,30 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // map click event
-let firstMarker;
+let markers = [];
 map.on('click', function(e) {
-    if (!firstMarker) {
-        firstMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
-    } else {
-        let secondMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+    let newMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+    markers.push(newMarker);
+
+    if (markers.length > 1) {
+        let lastMarker = markers[markers.length - 2];
 
         // Initialize the route
         L.Routing.control({
             waypoints: [
-                firstMarker.getLatLng(),
-                secondMarker.getLatLng()
+                lastMarker.getLatLng(),
+                newMarker.getLatLng()
             ]
         }).on('routesfound', function(e) {
             console.log(e);
             e.routes[0].coordinates.forEach(function(coord, index){
                 setTimeout(() => {
-                    firstMarker.setLatLng([coord.lat, coord.lng]);
+                    lastMarker.setLatLng([coord.lat, coord.lng]);
                 }, 100 * index);
             });
         }).addTo(map);
-
-        // Reset firstMarker for the next route
-        firstMarker = null;
-        }
-    });
+    }
+});
 
 // Location Search
 L.Control.geocoder().addTo(map);
