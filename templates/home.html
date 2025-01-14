@@ -10,6 +10,18 @@
   
   <!-- leaflet routing machine -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+
+  <style>
+    #map {
+        height: 100vh;
+    }
+    .mode-control {
+        background: white;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+</style>
 </head>
 <body>
 	<div class="container mt-5">
@@ -20,38 +32,94 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script>
-    // Map
-    var map = L.map('map').setView([14.599512, 120.984222], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19
-    }).addTo(map);
+   // Initialize the map
+var map = L.map('map').setView([14.599512, 120.984222], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19
+}).addTo(map);
 
-    // map click event
-    map.on('click', function(e) {
-      console.log(e)
-      var startMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
-      
-      // Will initialize the route
-      map.on('click', function(e2) {
-        console.log(e2)
-        var endMarker = L.marker([e2.latlng.lat, e2.latlng.lng]).addTo(map);
-        
-        L.Routing.control({
-          waypoints: [
-            L.latLng(startMarker.getLatLng().lat, startMarker.getLatLng().lng),
-            L.latLng(e2.latlng.lat, e2.latlng.lng)
-          ]
-        }).on('routesfound', function(e) {
-          console.log(e)
-          e.routes[0].coordinates.forEach(function(coord, index){
-            setTimeout(() => {
-              startMarker.setLatLng([coord.lat, coord.lng])
-            }, 100 * index);
-          })
-        })  
-        .addTo(map);
-      }, { once: true });
+// Create a dropdown for transportation modes
+var modeControl = L.control({ position: 'topright' });
+modeControl.onAdd = function(map) {
+    var div = L.DomUtil.create('div', 'info mode-control');
+    div.innerHTML = `
+        <label for="transportation-mode">Mode:</label>
+        <select id="transportation-mode">
+            <option value="foot-walking">Walking</option>
+            <option value="cycling-regular">Cycling</option>
+            <option value="driving-car">Driving</option>
+        </select>
+    `;
+    L.DomEvent.disableClickPropagation(div);
+    return div;
+};
+modeControl.addTo(map);
+
+// Map click event for selecting start and end points
+let startMarker, endMarker;
+
+map.on('click', function (e) {
+    if (!startMarker) {
+        startMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+    } else if (!endMarker) {
+        endMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+
+        // Fetch route after both markers are placed
+        fetchRoute();
+    }
+});
+
+function fetchRoute() {
+    const mode = document.getElementById('transportation-mode').value;
+    const startCoords = [startMarker.getLatLng().lat, startMarker.getLatLng().lng];
+    const endCoords = [endMarker.getLatLng().lat, endMarker.getLatLng().lng];
+
+
+    fetch(`https://api.openrouteservice.org/v2/directions/${mode}/json`, {
+        method: 'POST',
+        headers: {
+            'Authorization': '5b3ce3597851110001cf62485a594335aa004b7b9cf4a5a1eb216cc6',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            coordinates: [startCoords, endCoords]
+        })
     })
+    .then(response => response.json())
+    .then(data => {
+        console.log('API Response:', data);  // Log the API response to inspect
+
+        if (data && data.routes && data.routes.length > 0) {
+            const route = data.routes[0].geometry.coordinates.map(coord => [coord[1], coord[0]]);
+            L.polyline(route, { color: 'blue' }).addTo(map);
+            // Animate the route on the map
+            animateRoute(route);
+        } else {
+            // Handle cases when no route is found
+            console.error('No route found:', data);
+        }
+    })
+    .catch(err => {
+        // Log any errors during fetch or processing
+        console.error('Error fetching route:', err);
+    });
+}
+
+
+function animateRoute(route) {
+    let index = 0;
+    const marker = L.marker(route[0]).addTo(map);
+
+    function moveMarker() {
+        if (index < route.length) {
+            marker.setLatLng(route[index]);
+            index++;
+            setTimeout(moveMarker, 100); // Adjust speed
+        }
+    }
+    moveMarker();
+}
+
 </script>
 </body>
 </html>
