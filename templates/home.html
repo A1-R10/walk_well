@@ -8,13 +8,14 @@ Walk Well
     <div class="container mt-5">
     <h1 class="text-center">Walk Well</h1>
     <div id="map" class="mt-4" style="height: 500px;"></div>
+    <button class="zoom-to-layer">Go Back</button>
 {% endblock %}
 
  <!-- leaflet script -->
 {% block scripts %}
 <script>
    // Initialize the map
-const map = L.map('map').setView([14.599512, 120.984222], 13);
+var map = L.map('map').setView([14.599512, 120.984222], 13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19
 }).addTo(map);
@@ -49,6 +50,11 @@ map.on('click', function(e) {
 
 // Location Search
 L.Control.geocoder().addTo(map);
+
+// Reset Location
+$('.zoom-to-layer').click(function() {
+    map.setView([14.599512, 120.984222], 13);
+})
 
 </script>
 {% endblock %}
