@@ -10,3 +10,14 @@ services:
     image: app:walk_well  # Name of the Docker image
     container_name: walk_well_app  # Name of the container
     command: python manage.py runserver 0.0.0.0:8000  # Command to run your app
+    depends_on:
+      - db
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    container_name: postgres_db
