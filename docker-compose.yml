@@ -1,8 +1,7 @@
 version: '3'
 services:
   app:
-    build:
-      context: .  # Specifies the current directory as the build context
+    build: .  # Specifies the current directory as the build context
     volumes:
       - .:/walk_well  # Mounts the current directory into the container
     ports:
@@ -21,3 +20,5 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     container_name: postgres_db
+
+    
