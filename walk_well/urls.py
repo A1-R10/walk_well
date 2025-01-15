@@ -5,4 +5,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('dashboard.urls')),
     path("accounts/", include("user_authentication.urls")),
+    path('accounts/auth/', include('allauth.urls')),
 ]
