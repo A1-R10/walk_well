@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -149,8 +150,8 @@ ACCOUNT_LOGOUT_REDIRECT_URL = "login"
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
-            'client_id': '140622292462-07jlik5pligfrgvv6r3kmee71c04mamo.apps.googleusercontent.com',
-            'secret': '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',
+            'client_id': os.getenv('GOOGLE_OAUTH_CLIENT_ID'),
+            'secret': os.getenv('GOOGLE_OAUTH_CLIENT_SECRET'),
             'key': ''
         }
     }
