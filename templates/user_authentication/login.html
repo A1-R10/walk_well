@@ -1,20 +1,39 @@
 {% load socialaccount %}
 
-<h2>Log In</h2>
-<form method="POST">
-    {% csrf_token %}
-    <input type="text" name="username" placeholder="Username" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <button type="submit">Log In</button>
-</form>
+{% block content %}
+<link rel="stylesheet" href="/static/css/login.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<div>
+    <div>
+        <h2 class="log-in">Log In</h2>
+        <p class="text">Sign in to continue</p>
+    </div>
 
-<div>
-    <a href="{% provider_login_url 'google' %}">
-        <span>Login with Google</span>
-    </a>
+    <div class="bottom">
+        <form method="POST">
+            {% csrf_token %}
+            <p class="email">USERNAME</p>
+            <input class="name" type="text" name="username" placeholder="Username" required>
+            <p class="pass">PASSWORD</p>
+            <input class="password" type="password" name="password" placeholder="Password" required>
+            <button class="submit-button" type="submit">Login</button>
+        </form>
+    </div>
+
+    <div class="social-login">
+        <div>
+            <a href="{% provider_login_url 'google' %}">
+                <button class="submit-button">Login with Google</button>
+            </a>
+        </div>
+        <div>
+            <a href="{% provider_login_url 'github' %}">
+                <button class="submit-button">Login with Github</button>
+            </a>
+        </div>
+    </div>
 </div>
-<div>
-    <a href="{% provider_login_url 'github' %}">
-        <span>Login with Github</span>
-    </a>
-</div>
+    
+{% endblock %}

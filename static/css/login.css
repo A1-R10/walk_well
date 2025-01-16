@@ -1,0 +1,116 @@
+body {
+    background-color: black;
+    color: white;
+    margin: 0;
+    font-family: Roboto, Arial;
+    margin-top: 100px;
+}
+
+.container {
+  display: flex;
+  background-color: black;
+  border: none;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  margin-left: 3px;
+  margin-top: 5px
+}
+
+.dots {
+  background-color: black;
+  border: none;
+  height: 25px;
+}
+
+.dots:hover {
+  background-color: gray;
+  cursor: pointer;
+}
+
+
+.header {
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
+  align-items: center;
+  left: 0;
+  right: 0;
+  margin-bottom: 70px;
+}
+
+.log-in,
+.text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.log-in {
+  font-size: 40px;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.text {
+  font-size: 20px;
+  font-weight: 500;
+  margin-top: 12px;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0;
+}
+
+.email,
+.pass {
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.name,
+.password {
+  font-family: Roboto, Arial;
+  display: block;
+  border: 2px solid gray;
+  width: 250px;
+  height: 30px;
+  padding: 5px 10px;
+  background-color: black;
+  color: white;
+  margin-bottom: 30px;
+}
+
+.submit-button {
+  display: block;
+  margin: auto;
+  background-color: white;
+  margin-top: 20px;
+  font-weight: bold;
+  padding: 8px 60px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 
+  0.15s;
+}
+
+
+.submit-button:hover {
+  background-color: rgb(180, 180, 180);
+}
+
+.submit-button:active {
+background-color: white;
+}
+
+.social-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
