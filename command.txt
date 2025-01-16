@@ -1,2 +1,9 @@
 docker build --tag python-django .
 docker run --publish 8000:8000 python-django
+
+
+go to database
+docker exec -it walk_well_app bash
+exit
+
+pip install -r requirements.txt
