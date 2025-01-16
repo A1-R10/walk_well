@@ -1,0 +1,101 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }}</title>
+    <!-- Import W3.CSS and Fonts -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   
+    <!-- Main css -->
+    <link rel="stylesheet" href="{% static 'blog/css/post_details.css' %}">
+</head>
+<body>
+<!-- Page Content -->
+<div class="w3-content" style="max-width:2000px;margin-top:46px">
+
+  <!-- Back Button -->
+  <div class="back-button">
+    <a href="{% url 'home' %}">
+      <i class="fa fa-arrow-left"></i> Back
+    </a>
+  </div>
+
+  <!-- Slideshow Section -->
+  <div class="mySlides w3-display-container w3-center">
+    {% if post.image %}
+        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="blog-image">
+    {% else %}
+        <img src="{% static 'blog/images/blog_post_picture/default.jpg' %}" alt="Default Image">
+    {% endif %}
+  </div>
+
+  <!-- Blog Post -->
+  <div class="post-container">
+    <h1 class="post-title">{{ post.title }}</h1>
+    <p class="post-author"><i>By {{ post.author }}</i></p>
+    <p class="post-content">{{ post.content }}</p>
+    
+    {% if user.is_authenticated and user == post.author %}
+      <form method="POST" action="{% url 'post-delete' post.id %}" style="margin-top: 20px; display: inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Delete Post</button>
+      </form>
+      <a href="{% url 'edit_post' post.id %}" class="btn btn-warning" style="margin-top: 20px; display: inline; margin-left: 10px;">
+          Edit Post
+      </a>
+    {% endif %}
+
+  </div>
+
+  <!-- Comments Section -->
+  <div class="w3-container w3-padding w3-light-grey w3-round w3-margin-top">
+    <h2 class="w3-border-bottom w3-padding-small w3-text-grey">Comments</h2>
+    
+    <!-- Existing Comments -->
+    <div>
+        {% for comment in comments %}
+        <div class="w3-padding w3-white w3-round w3-margin-bottom" style="box-shadow: 0px 2px 5px rgba(0,0,0,0.1);">
+            <p><strong class="w3-text-teal">{{ comment.name }}</strong> 
+            <span class="w3-small w3-text-grey">({{ comment.created_at|date:"F j, Y H:i" }})</span></p>
+            <p>{{ comment.body }}</p>
+        </div>
+        {% empty %}
+        <p class="w3-text-grey w3-center w3-padding">No comments yet. Be the first to comment!</p>
+        {% endfor %}
+    </div>
+
+    <!-- Divider -->
+    <hr class="w3-border-grey">
+
+    <!-- Add Comment Form -->
+    <div class="w3-container w3-padding-large w3-white w3-round-large w3-margin-top" style="box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+        <h3 class="w3-text-teal w3-border-bottom w3-padding-small w3-margin-bottom">Add a Comment</h3>
+        <form method="post" class="w3-container w3-padding">
+             {% csrf_token %}
+            <!-- Comment Field -->
+            <div class="w3-margin-bottom">
+                <textarea name="body" id="id_body" class="w3-input w3-border w3-round" placeholder="Write your comment here..." rows="5" required></textarea>
+            </div>
+            <!-- Submit Button -->
+            <button type="submit" class="w3-button w3-teal w3-hover-blue w3-round-large w3-padding-large" style="width: 100%; font-size: 16px;">
+                Submit Comment
+            </button>
+        </form>
+    </div>  
+</div>
+
+<!-- Footer -->
+<footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-grey w3-xlarge">
+  <i class="fa fa-facebook-official w3-hover-opacity"></i>
+  <i class="fa fa-instagram w3-hover-opacity"></i>
+  <i class="fa fa-twitter w3-hover-opacity"></i>
+</footer>
+
+<script src="blog/js/post_details.js"></script>
+</body>
+</html>
