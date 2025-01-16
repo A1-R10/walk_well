@@ -1,0 +1,119 @@
+body {
+    background-color: black;
+    color: white;
+    margin: 0;
+    font-family: Roboto, Arial;
+    margin-top: 50px;
+}
+
+.container {
+display: flex;
+background-color: black;
+border: none;
+height: 20px;
+align-items: center;
+justify-content: center;
+margin-left: 3px;
+margin-top: 5px
+}
+
+.dots {
+background-color: black;
+border: none;
+height: 25px;
+}
+
+.dots:hover {
+background-color: gray;
+cursor: pointer;
+}
+
+
+.header {
+display: flex;
+flex-direction: row;
+height: 50px;
+border-top: 1px solid gray;
+border-bottom: 1px solid gray;
+align-items: center;
+left: 0;
+right: 0;
+margin-bottom: 45px;
+}
+
+.register,
+.already {
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: center;
+}
+
+.here:hover {
+text-decoration: underline;
+cursor: pointer;
+color: blueviolet;
+}
+
+.register {
+font-size: 30px;
+font-weight: 500;
+margin-bottom: 0;
+}
+
+.already {
+font-size: 15px;
+font-weight: 500;
+margin-top: 12px;
+}
+
+.body {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+margin-top: 0;
+margin-bottom: 0;
+}
+
+.word {
+font-size: 13px;
+margin-bottom: 4px;
+}
+
+.f-name,
+.l-name,
+.u-name,
+.email,
+.p-word {
+font-family: Roboto, Arial;
+display: block;
+border: 2px solid gray;
+width: 250px;
+height: 30px;
+padding: 5px 10px;
+background-color: black;
+color: white;
+margin-bottom: 30px;
+}
+
+.submit-button {
+display: block;
+margin: auto;
+background-color: white;
+margin-top: 20px;
+font-weight: bold;
+padding: 8px 60px;
+border: none;
+cursor: pointer;
+transition: background-color 
+0.15s;
+}
+
+.submit-button:hover {
+background-color: rgb(180, 180, 180);
+}
+
+.submit-button:active {
+background-color: white;
+}
