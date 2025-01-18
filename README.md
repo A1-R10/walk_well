@@ -7,14 +7,13 @@ SafeRoute is a web application designed to help users find the safest route from
 - **Safest Route Planning**: Get routes tailored to your transportation method.
 - **Interactive Maps**: Visualize your journey using the Leaflet API.
 - **User Authentication**: Secure account registration, login, and management.
-- **Customizable Preferences**: Adjust safety preferences based on your needs.
 - **Real-Time Data**: Incorporates live data for accurate route calculations (future enhancement).
 
 ## ⚙️ Technologies Used
 - **Framework**: Django (Python)
 - **Mapping API**: Leaflet.js
 - **Frontend**: HTML, CSS, JavaScript
-- **Database**: SQLite (default for Django) or upgradeable to PostgreSQL
+- **Database**: PostgreSQL
 
 ## 🎯 Goals
 - Enhance user safety during travel by providing reliable and secure routing.
@@ -28,7 +27,7 @@ SafeRoute is a web application designed to help users find the safest route from
 - **Authentication**: Secure login and registration system.
 
 ## 🚀 Get Started
-1. Clone the repository.
+1. Clone the repository. 
 2. Install dependencies: `pip install -r requirements.txt`.
 3. Run the server: `python manage.py runserver`.
 4. Access the app at `http://127.0.0.1:8000/`.
